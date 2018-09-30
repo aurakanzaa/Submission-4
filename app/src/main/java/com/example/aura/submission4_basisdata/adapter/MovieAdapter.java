@@ -39,6 +39,29 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         this.listMovie = listMovie;
     }
 
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgPoster;
+        TextView tvTitle;
+        TextView tvOverview;
+        TextView tvDate;
+        TextView tvRating;
+        CardView klik_detail;
+        Button btn_share;
+        Button btn_detail;
+
+        MyViewHolder(View itemView) {
+            super(itemView);
+            imgPoster = itemView.findViewById(R.id.poster);
+            tvTitle = itemView.findViewById(R.id.tittle);
+            tvOverview = itemView.findViewById(R.id.deskripsi);
+            tvDate = itemView.findViewById(R.id.date);
+            tvRating = itemView.findViewById(R.id.rating);
+            klik_detail = itemView.findViewById(R.id.detailKlik);
+            btn_share = itemView.findViewById(R.id.btnShare);
+            btn_detail = itemView.findViewById(R.id.btnDetail);
+        }
+    }
+
     @Override
     public MovieAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.movie_list,
@@ -48,7 +71,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MovieAdapter.MyViewHolder holder, final int position) {
-        holder.tvJudul.setText(listMovie.get(position).getTitle());
+        holder.tvTitle.setText(listMovie.get(position).getTitle());
         holder.tvOverview.setText(listMovie.get(position).getOverview() + " ...");
         holder.tvRating.setText(listMovie.get(position).getVoteAverage());
         DateFormat inputFormat = new SimpleDateFormat(context.getString(R.string.FORMAT_YYY_MM_DD));
@@ -61,34 +84,34 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             e.printStackTrace();
         }
         String outputDateStr = outputFormat.format(date);
-        holder.tvRelease.setText(outputDateStr);
+        holder.tvDate.setText(outputDateStr);
         Glide.with(context)
                 .load(BuildConfig.IMAGE + listMovie.get(position).getPosterPath())
                 .into(holder.imgPoster);
 
-        holder.btn_item_list_detail.setOnClickListener(new View.OnClickListener() {
+        holder.btn_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra(Config.BUNDLE_ID, listMovie.get(position).getId());
                 intent.putExtra(Config.BUNDLE_POSTER_IMAGE, BuildConfig.IMAGE + listMovie.get(position).getPosterPath());
-                intent.putExtra(Config.BUNDLE_TITTLE, holder.tvJudul.getText().toString().trim());
+                intent.putExtra(Config.BUNDLE_TITTLE, holder.tvTitle.getText().toString().trim());
                 intent.putExtra(Config.BUNDLE_OVERVIEW, listMovie.get(position).getOverview());
-                intent.putExtra(Config.BUNDLE_RELEASE_DATE, holder.tvRelease.getText().toString().trim());
+                intent.putExtra(Config.BUNDLE_RELEASE_DATE, holder.tvDate.getText().toString().trim());
                 intent.putExtra(Config.BUNDLE_VOTE_AVERAGE, listMovie.get(position).getVoteAverage());
                 intent.putExtra(Config.BUNDLE_ORIGINAL_LANGUAGE, listMovie.get(position).getOriginalLanguage());
-                intent.putExtra(Config.BUNDLE_BACKDROPH_IMAGE, BuildConfig.IMAGE + listMovie.get(position).getBackdropPath());
+                intent.putExtra(Config.BUNDLE_BACKDROP_IMAGE, BuildConfig.IMAGE + listMovie.get(position).getBackdropPath());
 
                 context.startActivity(intent);
             }
         });
 
-        holder.btn_item_list_share.setOnClickListener(new View.OnClickListener() {
+        holder.btn_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                String shareBody = holder.tvJudul.getText().toString().trim();
+                String shareBody = holder.tvTitle.getText().toString().trim();
                 sharingIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.SUBJEK));
                 sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
                 context.startActivity(Intent.createChooser(sharingIntent, context.getString(R.string.SHARE_VIA)));
@@ -106,22 +129,22 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                final FilterResults oReturn = new FilterResults();
+                final FilterResults mReturn = new FilterResults();
                 final ArrayList<ResultItem> resultsItems = new ArrayList<>();
 
                 if (search == null)
                     search = listMovie;
                 if (constraint != null) {
                     if (listMovie != null & search.size() > 0) {
-                        for (final ResultItem g : search) {
-                            if (g.getTitle().toLowerCase().contains(constraint.toString()))
-                                resultsItems.add(g);
+                        for (final ResultItem result : search) {
+                            if (result.getTitle().toLowerCase().contains(constraint.toString()))
+                                resultsItems.add(result);
                         }
                     }
-                    oReturn.values = resultsItems;
+                    mReturn.values = resultsItems;
                 }
 
-                return oReturn;
+                return mReturn;
             }
 
             @Override
@@ -132,26 +155,5 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         };
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgPoster;
-        TextView tvJudul;
-        TextView tvOverview;
-        TextView tvRelease;
-        TextView tvRating;
-        CardView cv_klick_detail;
-        Button btn_item_list_share;
-        Button btn_item_list_detail;
 
-        MyViewHolder(View itemView) {
-            super(itemView);
-            imgPoster = itemView.findViewById(R.id.poster);
-            tvJudul = itemView.findViewById(R.id.tittle);
-            tvOverview = itemView.findViewById(R.id.deskripsi);
-            tvRelease = itemView.findViewById(R.id.date);
-            tvRating = itemView.findViewById(R.id.rating);
-            cv_klick_detail = itemView.findViewById(R.id.detailKlik);
-            btn_item_list_share = itemView.findViewById(R.id.btnShare);
-            btn_item_list_detail = itemView.findViewById(R.id.btnDetail);
-        }
-    }
 }

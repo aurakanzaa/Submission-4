@@ -27,7 +27,6 @@ public class MovieContentProvider extends ContentProvider {
     }
 
 
-    //1
     FavoriteDataHelper movieDBHelper;
     @Override
     public boolean onCreate() {

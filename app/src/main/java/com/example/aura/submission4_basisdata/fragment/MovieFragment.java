@@ -33,8 +33,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MovieFragment extends Fragment {
-    private EditText edtSearch;
-    private RecyclerView rvMovie;
+    private EditText editSearch;
+    private RecyclerView recylerMovie;
     private MovieAdapter movieAdapter ;
     private ArrayList<ResultItem> resultsItems;
     private SQLiteDatabase sqLiteDatabase;
@@ -66,13 +66,13 @@ public class MovieFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        edtSearch = view.findViewById(R.id.edt_search);
-        rvMovie = view.findViewById(R.id.rv_movie);
+        editSearch = view.findViewById(R.id.edit_search);
+        recylerMovie = view.findViewById(R.id.recycler_movie);
         resultsItems = new ArrayList<>();
         dbHelper = new FavoriteDataHelper(getActivity());
 
         getDataPopular();
-        edtSearch.addTextChangedListener(new TextWatcher() {
+        editSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -97,8 +97,8 @@ public class MovieFragment extends Fragment {
                 if (response.isSuccessful()){
                     resultsItems = response.body().getResults();
                     movieAdapter = new MovieAdapter(getActivity(), resultsItems);
-                    rvMovie.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    rvMovie.setAdapter(movieAdapter);
+                    recylerMovie.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    recylerMovie.setAdapter(movieAdapter);
                 }
             }
 

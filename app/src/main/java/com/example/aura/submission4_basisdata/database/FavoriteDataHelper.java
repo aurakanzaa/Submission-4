@@ -15,7 +15,7 @@ public class FavoriteDataHelper extends SQLiteOpenHelper {
      * @param db The database.
      */
 
-    private static final String DATABASE_NAME = "fav_movie.db";
+    private static final String DATABASE_NAME = "favorite_movie.db";
     private static final int DATABASE_VERSION = 24;
     public FavoriteDataHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -23,21 +23,18 @@ public class FavoriteDataHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "create table favorite(_id INTEGER primary key AUTOINCREMENT, id INTEGER not null, tittle text, tgl text null, vote_average text null, vote_count text null, original_language text null, overview text null, status_favorite text null);";
+        String CREATE_TABLE = "create table favorite(_id INTEGER primary key AUTOINCREMENT, id INTEGER not null, tittle text,  vote_average text null, original_language text null, overview text null, status_favorite text null);";
         Log.d("Data", "onCreate: " + CREATE_TABLE);
         String CREATE_TABLE_FAVORITE = "CREATE TABLE favorite (" +
                 Config.Movies._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 Config.Movies.FIELD_ID + " INTEGER NOT NULL, " +
                 Config.Movies.FIELD_TITTLE + " TEXT NOT NULL, " +
-                Config.Movies.FIELD_TGL + " TEXT NOT NULL, " +
                 Config.Movies.FIELD_VOTE_AVERAGE + " TEXT NOT NULL, " +
-                Config.Movies.FIELD_VOTE_COUNT + " TEXT NOT NULL, "+
                 Config.Movies.FIELD_ORIGINAL_LANGUAGE + " TEXT NOT NULL, " +
                 Config.Movies.FIELD_OVERVIEW + " TEXT NOT NULL, " +
                 Config.Movies.FIELD_STATUS_FAVORITE + " TEXT NOT NULL, " +
                 Config.Movies.FIELD_POSTER_PATH + " TEXT NOT NULL, " +
                 Config.Movies.FIELD_RELEASE_DATE + " TEXT NOT NULL, " +
-                Config.Movies.FIELD_POPULARITY + " TEXT NOT NULL, " +
                 Config.Movies.FIELD_BACKDROP_PATH + " TEXT NOT NULL);";
         db.execSQL(CREATE_TABLE_FAVORITE);
     }
@@ -65,5 +62,10 @@ public class FavoriteDataHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public void deleteFavorite(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+//        db.delete(FavoriteDataHelper.FavoriteEntry.TABLE_NAME, FavoriteContract.FavoriteEntry.COLUMN_MOVIEID+ "=" + id, null);
     }
 }

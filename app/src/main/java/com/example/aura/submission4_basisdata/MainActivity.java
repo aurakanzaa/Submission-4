@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.aura.submission4_basisdata.fragment.FavoriteFragment;
 import com.example.aura.submission4_basisdata.fragment.MovieFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -96,6 +97,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_search) {
 
         } else if (id == R.id.nav_fav) {
+            fm = getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.fm_pager_nav, new FavoriteFragment()).commit();
+            getSupportActionBar().setTitle("fav movie");
 
         } else if (id == R.id.nav_setting) {
 

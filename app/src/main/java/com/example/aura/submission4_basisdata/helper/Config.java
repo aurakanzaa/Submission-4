@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public class Config {
-    public static final String AUTHORITY = "com.example.root.submission_4_basis_data";
+public final class Config {
+    public static final String AUTHORITY = "com.example.aura.submission4_basisdata";
     public static final String PATH_TASKS ="listfilm";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
@@ -35,7 +35,7 @@ public class Config {
 
     public static final String BUNDLE_ID = "bundle_id";
     public static final String BUNDLE_POSTER_IMAGE = "bundle_image";
-    public static final String BUNDLE_BACKDROPH_IMAGE = "bundle_image_backdroph";
+    public static final String BUNDLE_BACKDROP_IMAGE = "bundle_image_backdroph";
     public static final String BUNDLE_TITTLE = "bundle_tittle";
     public static final String BUNDLE_OVERVIEW = "bundle_overview";
     public static final String BUNDLE_OVERVIEW_LANGUAGE = "bundle_overview_language";
@@ -45,8 +45,8 @@ public class Config {
     public static final String BUNDLE_POPULARITY = "bundle_popularity";
     public static final String BUNDLE_ORIGINAL_LANGUAGE = "bundle_language";
     public static final String BUNDLE_FAVORITE = "1";
-    public static final String BUNDLE_EXTRA_ITEM = "com.example.root.submission_4_basis_data.EXTRA_ITEM";
-    public static final String BUNDLE_TOAST_ACTION = "com.example.root.submission_4_basis_data.TOAST_ACTION";
+    public static final String BUNDLE_EXTRA_ITEM = "com.example.aura.submission4_basisdata.EXTRA_ITEM";
+    public static final String BUNDLE_TOAST_ACTION = "com.example.aura.submission4_basisdata.TOAST_ACTION";
 
     public static final String NOTIF_EXTRA_MESSAGE = "EXTRA_MESSAGE";
     public static final String NOTIF_TYPE_MESSAGE = "TYPE_MESSAGE";

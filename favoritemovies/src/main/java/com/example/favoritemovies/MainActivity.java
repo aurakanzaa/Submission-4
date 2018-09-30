@@ -1,13 +1,80 @@
 package com.example.favoritemovies;
 
+import android.database.Cursor;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.favoritemovies.adapter.FavoriteMovieAdapter;
+import com.example.favoritemovies.helper.Config;
+import com.example.favoritemovies.model.FavModel;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+
+    private RecyclerView recyclerView;
+    private ArrayList<FavModel> favoriteModels;
+    private com.example.favoritemovies.adapter.FavoriteMovieAdapter favoriteAdapter;
+    private static final int ID_FILM_LOADER = 100;
+    private String TAG = "Main";
+    private Cursor  cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        recyclerView = findViewById(R.id.rv);
+
+        favoriteModels = new ArrayList<>();
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        favoriteAdapter  = new FavoriteMovieAdapter(MainActivity.this);
+        favoriteAdapter.setListMovie(cursor);
+        recyclerView.setAdapter(favoriteAdapter);
+
+        if (savedInstanceState == null) {
+            getSupportLoaderManager().restartLoader(ID_FILM_LOADER, null, this);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this, Config.MoviesEntry.CONTENT_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        cursor = data;
+        favoriteAdapter.setListMovie(cursor);
+        favoriteAdapter.notifyDataSetChanged();
+        if (cursor.getCount() == 0){
+            Toast.makeText(this, "Tidak ada data", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        favoriteAdapter.setListMovie(null);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getSupportLoaderManager().destroyLoader(ID_FILM_LOADER);
     }
 }

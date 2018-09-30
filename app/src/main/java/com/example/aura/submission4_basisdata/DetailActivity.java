@@ -5,14 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.aura.submission4_basisdata.database.FavoriteDataHelper;
 import com.example.aura.submission4_basisdata.helper.Config;
+import com.github.ivbaranov.mfb.MaterialFavoriteButton;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 public class DetailActivity extends AppCompatActivity {
@@ -39,7 +43,7 @@ public class DetailActivity extends AppCompatActivity {
     private FloatingActionButton fab;
 
     private FavoriteDataHelper favoriteDataHelper;
-    private ShineButton btnFavorit;
+    private MaterialFavoriteButton materialFav;
 
     private SharedPreferences sharedPreferences;
 
@@ -49,8 +53,20 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        initView();
 
+
+        appBar = findViewById(R.id.app_bar);
+        toolbarLayout = findViewById(R.id.toolbar_layout);
+//        toolbar = findViewById(R.id.toolbar);
+        imgPoster = findViewById(R.id.poster);
+        tvReleaseDate = findViewById(R.id.release_date);
+        tvVote = findViewById(R.id.vote);
+        tvLang = findViewById(R.id.language);
+        tvOverview = findViewById(R.id.overview);
+        fab = findViewById(R.id.fab);
+        imgBackdrop = findViewById(R.id.backdrop);
+        fab = findViewById(R.id.fab);
+        materialFav = findViewById(R.id.btnFavorit);
 
 
         favoriteDataHelper = new FavoriteDataHelper(this);
@@ -68,7 +84,7 @@ public class DetailActivity extends AppCompatActivity {
         releaseDate = intent.getStringExtra(Config.BUNDLE_RELEASE_DATE);
         vote = intent.getStringExtra(Config.BUNDLE_VOTE_AVERAGE);
         language = intent.getStringExtra(Config.BUNDLE_ORIGINAL_LANGUAGE);
-        backdrop = intent.getStringExtra(Config.BUNDLE_BACKDROPH_IMAGE);
+        backdrop = intent.getStringExtra(Config.BUNDLE_BACKDROP_IMAGE);
 
         Glide.with(this).load(backdrop).error(R.drawable.ic_launcher_background).into(imgBackdrop);
         Glide.with(this).load(poster).error(R.drawable.ic_launcher_background).into(imgPoster);
@@ -79,27 +95,36 @@ public class DetailActivity extends AppCompatActivity {
         tvOverview.setText(overview);
 
 
-        sharedPreferences = getApplicationContext().getSharedPreferences("SETTING", 0);
-        Boolean favorit = sharedPreferences.getBoolean("FAVORITE"+ tittle, false);
-        if (favorit){
-            btnFavorit.setChecked(true);
-            btnFavorit.setVisibility(View.GONE);
-        }
-        btnFavorit.setOnCheckStateChangeListener(new ShineButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(View view, boolean checked) {
-                SharedPreferences.Editor  edit = sharedPreferences.edit();
-                if (checked){
-                    edit.putBoolean("FAVORITE"+tittle,true);
-                    edit.commit();
-                    saveDataFavorite();
-                } else {
-                    edit.putBoolean("FAVORITE"+tittle,false);
-                    edit.commit();
-                    btnFavorit.setEnabled(false);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        materialFav.setOnFavoriteChangeListener(
+                new MaterialFavoriteButton.OnFavoriteChangeListener(){
+                    @Override
+                    public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorit){
+                        if (favorit){
+//                            SharedPreferences.Editor editor = getSharedPreferences("com.delaroystudios.movieapp.DetailActivity", MODE_PRIVATE).edit();
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("Favorite Added", true);
+                            editor.commit();
+                            saveDataFavorite();
+                            Snackbar.make(buttonView, "Added to Favorite",
+                                    Snackbar.LENGTH_SHORT).show();
+                        }else{
+                            int movie_id = getIntent().getExtras().getInt("id");
+                            favoriteDataHelper = new FavoriteDataHelper(DetailActivity.this);
+                            favoriteDataHelper.deleteFavorite(movie_id);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+//                            SharedPreferences.Editor editor = getSharedPreferences("com.delaroystudios.movieapp.DetailActivity", MODE_PRIVATE).edit();
+                            editor.putBoolean("Favorite Removed", true);
+                            editor.commit();
+                            Snackbar.make(buttonView, "Removed from Favorite",
+                                    Snackbar.LENGTH_SHORT).show();
+                        }
+
+                    }
                 }
-            }
-        });
+        );
 
     }
 
@@ -109,7 +134,6 @@ public class DetailActivity extends AppCompatActivity {
         ContentValues contentValues  = new ContentValues();
         contentValues.put(Config.Movies.FIELD_ID, String.valueOf(id));
         contentValues.put(Config.Movies.FIELD_TITTLE, tittle);
-        contentValues.put(Config.Movies.FIELD_TGL, releaseDate);
         contentValues.put(Config.Movies.FIELD_VOTE_AVERAGE, vote);
         contentValues.put(Config.Movies.FIELD_ORIGINAL_LANGUAGE, language);
         contentValues.put(Config.Movies.FIELD_OVERVIEW, overview);
@@ -121,19 +145,5 @@ public class DetailActivity extends AppCompatActivity {
         Log.d("uri", "saveDataFavorite: "+ uri);
     }
 
-    private void initView() {
-        appBar = findViewById(R.id.app_bar);
-        toolbarLayout = findViewById(R.id.toolbar_layout);
-        toolbar = findViewById(R.id.toolbar);
-        imgPoster = findViewById(R.id.poster);
-        tvReleaseDate = findViewById(R.id.release_date);
-        tvVote = findViewById(R.id.vote);
-        tvLang = findViewById(R.id.language);
-        tvOverview = findViewById(R.id.overview);
-        fab = findViewById(R.id.fab);
-        imgBackdrop = findViewById(R.id.backdrop);
-        fab = findViewById(R.id.fab);
-        btnFavorit = findViewById(R.id.btnFavorit);
-    }
 
 }
