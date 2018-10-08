@@ -46,8 +46,8 @@
 
         <provider
             android:name="com.example.aura.submission4_basisdata.database.MovieContentProvider"
-            android:authorities="com.example.aura.submission4_basisdata.database.provider.MovieContentProvider"
-            android:exported="true"
+            android:authorities="com.example.aura.submission4_basisdata"
+            android:exported="false"
             android:syncable="true" />
 
     </application>

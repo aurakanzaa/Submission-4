@@ -83,7 +83,7 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id){
             case ID_FILM_LOADER:
-                Uri filmUri = Config.CONTENT_URI;
+                Uri filmUri = Config.Movies.CONTENT_URI;
                 Log.d(TAG, "onCreateLoader: "+ filmUri.toString());
                 return new CursorLoader(getActivity(), filmUri, null, null, null, null);
             default:

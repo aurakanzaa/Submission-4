@@ -10,16 +10,17 @@ import static com.example.aura.submission4_basisdata.helper.Config.Movies.TABLE_
 
 public final class Config {
     public static final String AUTHORITY = "com.example.aura.submission4_basisdata";
-    public static final String PATH_TASKS ="listfilm";
-//    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    public static final String TABLE_NAME ="listfilm";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
-    public  static  final Uri CONTENT_URI = new Uri.Builder().scheme("content://")
-            .authority(AUTHORITY)
-            .appendPath(TABLE_FAV)
-            .build();
+//    public  static  final Uri CONTENT_URI = new Uri.Builder().scheme("content://")
+//            .authority(AUTHORITY)
+//            .appendPath(TABLE_FAV)
+//            .build();
 
+//            public static Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_TASKS).build();
     public static final class Movies implements BaseColumns {
-//        public static Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_TASKS).build();
+        public static Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendEncodedPath(TABLE_NAME).build();
 
         public static final String TABLE_FAV = "favorite";
         public static final String CREATE_TABLE = "create table favorite(id integer primary key, tittle text null, release_date text null, vote_average text null,  original_language text null, overview text null, status_favorite text null);";

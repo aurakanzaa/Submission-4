@@ -52,7 +52,7 @@ public class DetailActivity extends AppCompatActivity {
     private MaterialFavoriteButton btnFav;
 
     private SharedPreferences sharedPreferences;
-    public static MainActivity main;
+//    public static MainActivity main;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,21 +82,21 @@ public class DetailActivity extends AppCompatActivity {
         sqLiteDatabase.isOpen();
 
 
-        SQLiteDatabase db  = favoriteDataHelper.getWritableDatabase();
-//        db.isOpen();
-        db.execSQL("insert into favorite(_id, id, title, vote_average, original_language, overview, status_favorite) values('"+
-//                _id.getText().toString() + " ','"+
-//                id.getText().toString() + "','"+
-                tvTitle.getText().toString() + "','"+
-                tvVote.getText().toString() + "','"+
-                tvLang.getText().toString() + "','"+
-                tvOverview.getText().toString() + "','"+
-//                tv.getText().toString() + "','"+
-                "')");
-                Toast.makeText(getApplicationContext(), "Insert Sukses!",
-                        Toast.LENGTH_LONG).show();
+//        SQLiteDatabase db  = favoriteDataHelper.getWritableDatabase();
+////        db.isOpen();
+//        db.execSQL("insert into favorite(_id, id, title, vote_average, original_language, overview, status_favorite) values('"+
+////                _id.getText().toString() + " ','"+
+////                id.getText().toString() + "','"+
+//                tvTitle.getText().toString() + "','"+
+//                tvVote.getText().toString() + "','"+
+//                tvLang.getText().toString() + "','"+
+//                tvOverview.getText().toString() + "','"+
+////                tv.getText().toString() + "','"+
+//                "')");
+//                Toast.makeText(getApplicationContext(), "Insert Sukses!",
+//                        Toast.LENGTH_LONG).show();
 //                MainActivity.main.RefreshList();
-                finish();
+//                finish();
 
         Intent intent = getIntent();
         id_movie = intent.getStringExtra("id_movie");
@@ -167,8 +167,8 @@ public class DetailActivity extends AppCompatActivity {
         contentValues.put(Config.Movies.POSTER , poster);
         contentValues.put(Config.Movies.RELEASE_DATE , relase_date);
         contentValues.put(Config.Movies.BACKDROP_PATH , backdrop);
-        Uri uri = getContentResolver().insert(Config.CONTENT_URI,contentValues);
-        Log.d("uri", "cekSimpanData: "+ uri);
+        Uri uri = getContentResolver().insert(Config.Movies.CONTENT_URI,contentValues);
+        Log.d("uri", "datadisimpan: "+ uri);
     }
 
 
