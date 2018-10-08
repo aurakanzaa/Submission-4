@@ -3,7 +3,6 @@ package com.example.aura.submission4_basisdata.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,8 +22,8 @@ import com.example.aura.submission4_basisdata.database.FavoriteDataHelper;
 import com.example.aura.submission4_basisdata.helper.Config;
 import com.example.aura.submission4_basisdata.model.MovieModel;
 import com.example.aura.submission4_basisdata.model.ResultItem;
-import com.example.aura.submission4_basisdata.rest.ApiService;
 import com.example.aura.submission4_basisdata.rest.Client;
+import com.example.aura.submission4_basisdata.rest.MovieService;
 
 import java.util.ArrayList;
 
@@ -90,8 +89,8 @@ public class MovieFragment extends Fragment {
         });
     }
     private void getDataPopular() {
-        ApiService apiService = Client.getInstanceRetrofit();
-        apiService.getMovie().enqueue(new Callback<MovieModel>() {
+        MovieService movieService = Client.getInstanceRetrofit();
+        movieService.getMovie().enqueue(new Callback<MovieModel>() {
             @Override
             public void onResponse(Call<MovieModel> call, Response<MovieModel> response) {
                 if (response.isSuccessful()){

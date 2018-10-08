@@ -6,7 +6,7 @@ import com.example.aura.submission4_basisdata.model.MovieModel;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
-public interface ApiService {
+public interface MovieService {
     @GET(BuildConfig.POPULAR_MOVIE)
     Call<MovieModel> getMovie();
 }

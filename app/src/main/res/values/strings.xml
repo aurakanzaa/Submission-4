@@ -38,4 +38,10 @@
     <string name="movie">Movie</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tanggal_rilis">tanggal rilis</string>
+    <string name="bahasa">bahasa</string>
+    <string name="vote_avg">5.0</string>
+    <string name="img_backdrop">img_backdrop</string>
+    <string name="poster">poster</string>
+    <string name="rating">star_img</string>
 </resources>

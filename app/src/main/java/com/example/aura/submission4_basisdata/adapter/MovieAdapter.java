@@ -93,15 +93,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(Config.BUNDLE_ID, listMovie.get(position).getId());
-                intent.putExtra(Config.BUNDLE_POSTER_IMAGE, BuildConfig.IMAGE + listMovie.get(position).getPosterPath());
-                intent.putExtra(Config.BUNDLE_TITTLE, holder.tvTitle.getText().toString().trim());
-                intent.putExtra(Config.BUNDLE_OVERVIEW, listMovie.get(position).getOverview());
-                intent.putExtra(Config.BUNDLE_RELEASE_DATE, holder.tvDate.getText().toString().trim());
-                intent.putExtra(Config.BUNDLE_VOTE_AVERAGE, listMovie.get(position).getVoteAverage());
-                intent.putExtra(Config.BUNDLE_ORIGINAL_LANGUAGE, listMovie.get(position).getOriginalLanguage());
-                intent.putExtra(Config.BUNDLE_BACKDROP_IMAGE, BuildConfig.IMAGE + listMovie.get(position).getBackdropPath());
-
+                intent.putExtra("id_movie", listMovie.get(position).getId());
+                intent.putExtra("poster", listMovie.get(position).getPosterPath());
+                intent.putExtra("backdrop", listMovie.get(position).getBackdropPath());
+                intent.putExtra("title", holder.tvTitle.getText().toString().trim());
+                intent.putExtra("overview", listMovie.get(position).getOverview());
+                intent.putExtra("relase_date", holder.tvDate.getText().toString().trim());
+                intent.putExtra("vote", listMovie.get(position).getVoteAverage());
+                intent.putExtra("language", listMovie.get(position).getOriginalLanguage());
                 context.startActivity(intent);
             }
         });
@@ -109,12 +108,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         holder.btn_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBody = holder.tvTitle.getText().toString().trim();
-                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.SUBJEK));
-                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                context.startActivity(Intent.createChooser(sharingIntent, context.getString(R.string.SHARE_VIA)));
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Link by TMDB");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
             }
         });
     }
@@ -129,8 +128,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                final FilterResults mReturn = new FilterResults();
-                final ArrayList<ResultItem> resultsItems = new ArrayList<>();
+                final FilterResults returnMovie = new FilterResults();
+                final ArrayList<ResultItem> hasilPencarian = new ArrayList<>();
 
                 if (search == null)
                     search = listMovie;
@@ -138,13 +137,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
                     if (listMovie != null & search.size() > 0) {
                         for (final ResultItem result : search) {
                             if (result.getTitle().toLowerCase().contains(constraint.toString()))
-                                resultsItems.add(result);
+                                hasilPencarian.add(result);
                         }
                     }
-                    mReturn.values = resultsItems;
+                    returnMovie.values = hasilPencarian;
                 }
 
-                return mReturn;
+                return returnMovie;
             }
 
             @Override

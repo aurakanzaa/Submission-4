@@ -15,20 +15,25 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.aura.submission4_basisdata.database.FavoriteDataHelper;
 import com.example.aura.submission4_basisdata.helper.Config;
 import com.github.ivbaranov.mfb.MaterialFavoriteButton;
-import com.sackcentury.shinebuttonlib.ShineButton;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private String poster, tittle, overview, overview_language, releaseDate, vote,  language, backdrop;
+    private String id_movie;
+    private String poster;
+    private String backdrop;
+    private String title;
+    private String overview;
+    private String relase_date;
+    private String vote;
+    private String language;
     private int id;
 
     private AppBarLayout appBar;
@@ -36,6 +41,7 @@ public class DetailActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView imgPoster;
     private ImageView imgBackdrop;
+    private TextView tvTitle;
     private TextView tvReleaseDate;
     private TextView tvVote;
     private TextView tvLang;
@@ -43,9 +49,10 @@ public class DetailActivity extends AppCompatActivity {
     private FloatingActionButton fab;
 
     private FavoriteDataHelper favoriteDataHelper;
-    private MaterialFavoriteButton materialFav;
+    private MaterialFavoriteButton btnFav;
 
     private SharedPreferences sharedPreferences;
+    public static MainActivity main;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,8 @@ public class DetailActivity extends AppCompatActivity {
         appBar = findViewById(R.id.app_bar);
         toolbarLayout = findViewById(R.id.toolbar_layout);
 //        toolbar = findViewById(R.id.toolbar);
+
+
         imgPoster = findViewById(R.id.poster);
         tvReleaseDate = findViewById(R.id.release_date);
         tvVote = findViewById(R.id.vote);
@@ -66,48 +75,67 @@ public class DetailActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
         imgBackdrop = findViewById(R.id.backdrop);
         fab = findViewById(R.id.fab);
-        materialFav = findViewById(R.id.btnFavorit);
-
+        btnFav = findViewById(R.id.btnFavorit);
 
         favoriteDataHelper = new FavoriteDataHelper(this);
         SQLiteDatabase sqLiteDatabase  = favoriteDataHelper.getWritableDatabase();
         sqLiteDatabase.isOpen();
 
+
+        SQLiteDatabase db  = favoriteDataHelper.getWritableDatabase();
+//        db.isOpen();
+        db.execSQL("insert into favorite(_id, id, title, vote_average, original_language, overview, status_favorite) values('"+
+//                _id.getText().toString() + " ','"+
+//                id.getText().toString() + "','"+
+                tvTitle.getText().toString() + "','"+
+                tvVote.getText().toString() + "','"+
+                tvLang.getText().toString() + "','"+
+                tvOverview.getText().toString() + "','"+
+//                tv.getText().toString() + "','"+
+                "')");
+                Toast.makeText(getApplicationContext(), "Insert Sukses!",
+                        Toast.LENGTH_LONG).show();
+//                MainActivity.main.RefreshList();
+                finish();
+
         Intent intent = getIntent();
-        poster = intent.getStringExtra(Config.BUNDLE_POSTER_IMAGE);
-        tittle = intent.getStringExtra(Config.BUNDLE_TITTLE);
-        getSupportActionBar().setTitle(tittle);
+        id_movie = intent.getStringExtra("id_movie");
+        poster = intent.getStringExtra("poster");
+        backdrop = intent.getStringExtra("backdrop");
+        title = intent.getStringExtra("title");
+        getSupportActionBar().setTitle(title);
+        overview = intent.getStringExtra("overview");
+        relase_date = intent.getStringExtra("relase_date");
+        vote = intent.getStringExtra("vote");
+        language = intent.getStringExtra("language");
 
-        id = Integer.parseInt(intent.getStringExtra(Config.BUNDLE_ID));
-        overview = intent.getStringExtra(Config.BUNDLE_OVERVIEW);
-        overview_language = intent.getStringExtra(Config.BUNDLE_OVERVIEW_LANGUAGE);
-        releaseDate = intent.getStringExtra(Config.BUNDLE_RELEASE_DATE);
-        vote = intent.getStringExtra(Config.BUNDLE_VOTE_AVERAGE);
-        language = intent.getStringExtra(Config.BUNDLE_ORIGINAL_LANGUAGE);
-        backdrop = intent.getStringExtra(Config.BUNDLE_BACKDROP_IMAGE);
+        Log.d("TEST", "onCreatePOSTER COBA: " +  poster);
+        Log.d("TEST", "onCreateBACK COBA: " +  backdrop);
 
-        Glide.with(this).load(backdrop).error(R.drawable.ic_launcher_background).into(imgBackdrop);
-        Glide.with(this).load(poster).error(R.drawable.ic_launcher_background).into(imgPoster);
+        Glide.with(this).load("https://image.tmdb.org/t/p/w500/" + backdrop).error(R.drawable.ic_launcher_background).into(imgBackdrop);
+        Glide.with(this).load("https://image.tmdb.org/t/p/w500" + poster).error(R.drawable.ic_launcher_background).into(imgPoster);
 
-        tvReleaseDate.setText(releaseDate);
+        tvReleaseDate.setText(relase_date);
         tvVote.setText(vote);
         tvLang.setText(language);
         tvOverview.setText(overview);
 
 
-
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        materialFav.setOnFavoriteChangeListener(
+        Boolean favorit = sharedPreferences.getBoolean("Favorite"+ title, false);
+        if (favorit){
+            btnFav.setAnimateFavorite(true);
+            btnFav.setVisibility(View.GONE);
+        }
+        btnFav.setOnFavoriteChangeListener(
                 new MaterialFavoriteButton.OnFavoriteChangeListener(){
                     @Override
                     public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorit){
                         if (favorit){
-//                            SharedPreferences.Editor editor = getSharedPreferences("com.delaroystudios.movieapp.DetailActivity", MODE_PRIVATE).edit();
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putBoolean("Favorite Added", true);
                             editor.commit();
-                            saveDataFavorite();
+                            save();
                             Snackbar.make(buttonView, "Added to Favorite",
                                     Snackbar.LENGTH_SHORT).show();
                         }else{
@@ -115,7 +143,6 @@ public class DetailActivity extends AppCompatActivity {
                             favoriteDataHelper = new FavoriteDataHelper(DetailActivity.this);
                             favoriteDataHelper.deleteFavorite(movie_id);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-//                            SharedPreferences.Editor editor = getSharedPreferences("com.delaroystudios.movieapp.DetailActivity", MODE_PRIVATE).edit();
                             editor.putBoolean("Favorite Removed", true);
                             editor.commit();
                             Snackbar.make(buttonView, "Removed from Favorite",
@@ -125,24 +152,23 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 }
         );
-
     }
 
 
 
-    private void saveDataFavorite() {
+    private void save() {
         ContentValues contentValues  = new ContentValues();
-        contentValues.put(Config.Movies.FIELD_ID, String.valueOf(id));
-        contentValues.put(Config.Movies.FIELD_TITTLE, tittle);
-        contentValues.put(Config.Movies.FIELD_VOTE_AVERAGE, vote);
-        contentValues.put(Config.Movies.FIELD_ORIGINAL_LANGUAGE, language);
-        contentValues.put(Config.Movies.FIELD_OVERVIEW, overview);
-        contentValues.put(Config.Movies.FIELD_STATUS_FAVORITE, "favorite");
-        contentValues.put(Config.Movies.FIELD_POSTER_PATH , poster);
-        contentValues.put(Config.Movies.FIELD_RELEASE_DATE , releaseDate);
-        contentValues.put(Config.Movies.FIELD_BACKDROP_PATH , backdrop);
-        Uri uri = getContentResolver().insert(Config.Movies.CONTENT_URI,contentValues);
-        Log.d("uri", "saveDataFavorite: "+ uri);
+        contentValues.put(Config.Movies.ID, String.valueOf(id));
+        contentValues.put(Config.Movies.TITTLE, title);
+        contentValues.put(Config.Movies.VOTE, vote);
+        contentValues.put(Config.Movies.LANGUAGE, language);
+        contentValues.put(Config.Movies.OVERVIEW, overview);
+        contentValues.put(Config.Movies.STATUS_FAVORITE, "favorite");
+        contentValues.put(Config.Movies.POSTER , poster);
+        contentValues.put(Config.Movies.RELEASE_DATE , relase_date);
+        contentValues.put(Config.Movies.BACKDROP_PATH , backdrop);
+        Uri uri = getContentResolver().insert(Config.CONTENT_URI,contentValues);
+        Log.d("uri", "cekSimpanData: "+ uri);
     }
 
 

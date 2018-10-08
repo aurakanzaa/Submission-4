@@ -54,11 +54,13 @@ public class FavModel {
 
     public FavModel(Cursor cursor) {
         this.id = Config.getColomnString(cursor, _ID);
-        this.title = Config.getColomnString(cursor, Config.Movies.FIELD_TITTLE);
-        this.releaseDate = Config.getColomnString(cursor, Config.Movies.FIELD_RELEASE_DATE);
-        this.overview = Config.getColomnString(cursor, Config.Movies.FIELD_OVERVIEW);
-        this.backdropPath = Config.getColomnString(cursor, Config.Movies.FIELD_BACKDROP_PATH);
-        this.posterPath = Config.getColomnString(cursor, Config.Movies.FIELD_POSTER_PATH);
+        this.title = Config.getColomnString(cursor, Config.Movies.TITTLE);
+        this.voteAverage = Config.getColomnString(cursor, Config.Movies.VOTE);
+        this.originalLanguage = Config.getColomnString(cursor, Config.Movies.LANGUAGE);
+        this.releaseDate = Config.getColomnString(cursor, Config.Movies.RELEASE_DATE);
+        this.overview = Config.getColomnString(cursor, Config.Movies.OVERVIEW);
+        this.backdropPath = Config.getColomnString(cursor, Config.Movies.BACKDROP_PATH);
+        this.posterPath = Config.getColomnString(cursor, Config.Movies.POSTER);
     }
     public void setOriginalLanguage(String originalLanguage) {
         this.originalLanguage = originalLanguage;

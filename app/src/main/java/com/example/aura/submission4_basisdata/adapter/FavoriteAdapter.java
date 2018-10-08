@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.aura.submission4_basisdata.DetailActivity;
@@ -77,14 +79,14 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(Config.BUNDLE_ID, listMovie.get(position).getId());
-                intent.putExtra(Config.BUNDLE_POSTER_IMAGE, listMovie.get(position).getPosterPath());
-                intent.putExtra(Config.BUNDLE_TITTLE, holder.tvTitle.getText().toString().trim());
-                intent.putExtra(Config.BUNDLE_OVERVIEW, listMovie.get(position).getOverview());
-                intent.putExtra(Config.BUNDLE_RELEASE_DATE, holder.tvDate.getText().toString().trim());
-                intent.putExtra(Config.BUNDLE_VOTE_AVERAGE, listMovie.get(position).getVoteAverage());
-                intent.putExtra(Config.BUNDLE_ORIGINAL_LANGUAGE, listMovie.get(position).getOriginalLanguage());
-                intent.putExtra(Config.BUNDLE_BACKDROP_IMAGE, listMovie.get(position).getBackdropPath());
+                intent.putExtra("id_movie", listMovie.get(position).getId());
+                intent.putExtra("poster", listMovie.get(position).getPosterPath());
+                intent.putExtra("backdrop", listMovie.get(position).getBackdropPath());
+                intent.putExtra("title", holder.tvTitle.getText().toString().trim());
+                intent.putExtra("overview", listMovie.get(position).getOverview());
+                intent.putExtra("relase_date", holder.tvDate.getText().toString().trim());
+                intent.putExtra("vote", listMovie.get(position).getVoteAverage());
+                intent.putExtra("language", listMovie.get(position).getOriginalLanguage());
                 context.startActivity(intent);
             }
         });
@@ -92,12 +94,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
         holder.btn_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBody = holder.tvTitle.getText().toString().trim();
-                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.SUBJEK));
-                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                context.startActivity(Intent.createChooser(sharingIntent, context.getString(R.string.SHARE_VIA)));
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Link by TMDB");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
             }
         });
     }
@@ -112,7 +114,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                final FilterResults mReturn = new FilterResults();
+                final FilterResults returnMovie = new FilterResults();
                 final ArrayList<FavModel> FavoriteModels = new ArrayList<>();
 
                 if (search == null)
@@ -124,10 +126,10 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
                                 FavoriteModels.add(result);
                         }
                     }
-                    mReturn.values = FavoriteModels;
+                    returnMovie.values = FavoriteModels;
                 }
 
-                return mReturn;
+                return returnMovie;
             }
 
             @Override

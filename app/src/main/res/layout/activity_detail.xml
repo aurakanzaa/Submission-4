@@ -24,10 +24,11 @@
             app:toolbarId="@+id/toolbar">
 
             <ImageView
+                android:id="@+id/backdrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:id="@+id/backdrop"/>
+                android:contentDescription="@string/img_backdrop"
+                android:scaleType="fitXY" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

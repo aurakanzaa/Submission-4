@@ -23,8 +23,8 @@ public class Client {
         return retrofit;
     }
 
-    public static ApiService getInstanceRetrofit() {
-        return getClient().create(ApiService.class);
+    public static MovieService getInstanceRetrofit() {
+        return getClient().create(MovieService.class);
     }
 
 }

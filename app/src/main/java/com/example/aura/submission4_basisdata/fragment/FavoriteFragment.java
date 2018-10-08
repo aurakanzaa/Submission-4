@@ -83,7 +83,7 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id){
             case ID_FILM_LOADER:
-                Uri filmUri = Config.Movies.CONTENT_URI;
+                Uri filmUri = Config.CONTENT_URI;
                 Log.d(TAG, "onCreateLoader: "+ filmUri.toString());
                 return new CursorLoader(getActivity(), filmUri, null, null, null, null);
             default:
@@ -96,7 +96,7 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
         if(data.getCount()>0) {
             initAdapter(getMoviesFromCursor(data));
         } else {
-            Toast.makeText(getActivity(), "Tidak Ada Favorite", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "favorite movie not found", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -106,14 +106,14 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
             if (cursor.moveToFirst()){
                 do{
                     FavModel FavoriteModel = new FavModel(cursor);
-                    FavoriteModel.setId(cursor.getString(cursor.getColumnIndex(Config.Movies.FIELD_ID)));
-                    FavoriteModel.setPosterPath(cursor.getString(cursor.getColumnIndex(Config.Movies.FIELD_POSTER_PATH)));
-                    FavoriteModel.setBackdropPath(cursor.getString(cursor.getColumnIndex(Config.Movies.FIELD_BACKDROP_PATH)));
-                    FavoriteModel.setTitle(cursor.getString(cursor.getColumnIndex(Config.Movies.FIELD_TITTLE)));
-                    FavoriteModel.setVoteAverage(cursor.getString(cursor.getColumnIndex(Config.Movies.FIELD_VOTE_AVERAGE)));
-                    FavoriteModel.setReleaseDate(cursor.getString(cursor.getColumnIndex(Config.Movies.FIELD_RELEASE_DATE)));
-                    FavoriteModel.setOriginalLanguage(cursor.getString(cursor.getColumnIndex(Config.Movies.FIELD_ORIGINAL_LANGUAGE)));
-                    FavoriteModel.setOverview(cursor.getString(cursor.getColumnIndex(Config.Movies.FIELD_OVERVIEW)));
+                    FavoriteModel.setId(cursor.getString(cursor.getColumnIndex(Config.Movies.ID)));
+                    FavoriteModel.setPosterPath(cursor.getString(cursor.getColumnIndex(Config.Movies.POSTER)));
+                    FavoriteModel.setBackdropPath(cursor.getString(cursor.getColumnIndex(Config.Movies.BACKDROP_PATH)));
+                    FavoriteModel.setTitle(cursor.getString(cursor.getColumnIndex(Config.Movies.TITTLE)));
+                    FavoriteModel.setVoteAverage(cursor.getString(cursor.getColumnIndex(Config.Movies.VOTE)));
+                    FavoriteModel.setReleaseDate(cursor.getString(cursor.getColumnIndex(Config.Movies.RELEASE_DATE)));
+                    FavoriteModel.setOriginalLanguage(cursor.getString(cursor.getColumnIndex(Config.Movies.LANGUAGE)));
+                    FavoriteModel.setOverview(cursor.getString(cursor.getColumnIndex(Config.Movies.OVERVIEW)));
                     items.add(FavoriteModel);
                 }while(cursor.moveToNext());
             }
