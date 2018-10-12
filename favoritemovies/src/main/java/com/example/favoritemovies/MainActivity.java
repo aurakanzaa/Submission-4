@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private RecyclerView recyclerView;
     private ArrayList<FavModel> favoriteModels;
     private com.example.favoritemovies.adapter.FavoriteMovieAdapter favoriteAdapter;
-    private static final int ID_FILM_LOADER = 100;
+    private static final int LOADER = 100;
     private String TAG = "Main";
     private Cursor  cursor;
 
@@ -32,13 +32,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         recyclerView = findViewById(R.id.rv);
 
         favoriteModels = new ArrayList<>();
+
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         favoriteAdapter  = new FavoriteMovieAdapter(MainActivity.this);
         favoriteAdapter.setListMovie(cursor);
         recyclerView.setAdapter(favoriteAdapter);
 
         if (savedInstanceState == null) {
-            getSupportLoaderManager().restartLoader(ID_FILM_LOADER, null, this);
+            getSupportLoaderManager().restartLoader(LOADER, null, this);
         }
     }
 
@@ -75,6 +76,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        getSupportLoaderManager().destroyLoader(ID_FILM_LOADER);
+        getSupportLoaderManager().destroyLoader(LOADER);
     }
 }

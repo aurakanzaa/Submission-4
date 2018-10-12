@@ -73,16 +73,14 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(Config.BUNDLE_ID, favModel.getId());
-
+                intent.putExtra("id_movie", favModel.getId());
                 intent.putExtra("poster", favModel.getPosterPath());
-                intent.putExtra("title", favModel.getTitle());
+                intent.putExtra("backdrop", favModel.getBackdropPath());
+                intent.putExtra("title", holder.tvTittle.getText().toString().trim());
                 intent.putExtra("overview", favModel.getOverview());
-                intent.putExtra("relase_date", favModel.getReleaseDate());
+                intent.putExtra("relase_date", holder.tvDate.getText().toString().trim());
                 intent.putExtra("vote", favModel.getVoteAverage());
                 intent.putExtra("language", favModel.getOriginalLanguage());
-                intent.putExtra("backdrop", favModel.getBackdropPath());
-
                 context.startActivity(intent);
 
             }

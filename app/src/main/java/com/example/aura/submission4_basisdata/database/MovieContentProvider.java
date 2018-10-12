@@ -172,14 +172,14 @@ public class MovieContentProvider extends ContentProvider {
 //                        null,
 //                        null,
 //                        sortOrder);
-                queryBuilder.appendWhere(Config.Movies.ID_ + "="
+                queryBuilder.appendWhere(Config.Movies.ID + "="
                 + uri.getLastPathSegment());
                 break;
             case ALL_MOVIE:
                 break;
             default:
 //                throw new UnsupportedOperationException("Unknown uri: " + uri);
-                throw new IllegalArgumentException("UNKNOWN URI");
+                throw new IllegalArgumentException("UNKNOWN URI"+uri);
         }
         Cursor cursor = queryBuilder.query(dbHelper.getReadableDatabase(),
                 projection,selection,selectionArgs, null, null, sortOrder);

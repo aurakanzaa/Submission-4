@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -19,17 +20,26 @@ import com.github.ivbaranov.mfb.MaterialFavoriteButton;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private String imagePoster, tittle, overview, release, voteAverage, language, backdrophImage;
+    private String id_movie;
+    private String poster;
+    private String backdrop;
+    private String title;
+    private String overview;
+    private String relase_date;
+    private String vote;
+    private String language;
+    private int id;
 
     private AppBarLayout appBar;
     private CollapsingToolbarLayout toolbarLayout;
     private Toolbar toolbar;
-    private ImageView imgPosterFav;
-    private ImageView imgBackdropFav;
-    private TextView tvReleaseDateFav;
-    private TextView tvVoteFav;
-    private TextView tvLangFav;
-    private TextView tvOverviewFav;
+    private ImageView imgPoster;
+    private ImageView imgBackdrop;
+    private TextView tvTitle;
+    private TextView tvReleaseDate;
+    private TextView tvVote;
+    private TextView tvLang;
+    private TextView tvOverview;
     private FloatingActionButton fab;
 
     @Override
@@ -39,7 +49,15 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initView();
+        appBar = findViewById(R.id.app_bar);
+        toolbarLayout = findViewById(R.id.toolbar_layout);
+        imgPoster = findViewById(R.id.poster);
+        tvReleaseDate = findViewById(R.id.release_date);
+        tvVote = findViewById(R.id.vote);
+        tvLang = findViewById(R.id.language);
+        tvOverview = findViewById(R.id.overview);
+        fab = findViewById(R.id.fab);
+        imgBackdrop = findViewById(R.id.backdrop);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -51,38 +69,30 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        imagePoster = intent.getStringExtra(Config.BUNDLE_POSTER_IMAGE);
-        tittle = intent.getStringExtra(Config.BUNDLE_TITTLE);
-        getSupportActionBar().setTitle(tittle);
+        id_movie = intent.getStringExtra("id_movie");
+        poster = intent.getStringExtra("poster");
+        backdrop = intent.getStringExtra("backdrop");
+        title = intent.getStringExtra("title");
+        getSupportActionBar().setTitle(title);
+        overview = intent.getStringExtra("overview");
+        relase_date = intent.getStringExtra("relase_date");
+        vote = intent.getStringExtra("vote");
+        language = intent.getStringExtra("language");
 
-        overview = intent.getStringExtra(Config.BUNDLE_OVERVIEW);
-        release = intent.getStringExtra(Config.BUNDLE_RELEASE_DATE);
-        voteAverage = intent.getStringExtra(Config.BUNDLE_VOTE_AVERAGE);
-        language = intent.getStringExtra(Config.BUNDLE_ORIGINAL_LANGUAGE);
-        backdrophImage = intent.getStringExtra(Config.BUNDLE_BACKDROPH_IMAGE);
+        Log.d("TEST", "onCreatePOSTER COBA: " +  poster);
+        Log.d("TEST", "onCreateBACK COBA: " +  backdrop);
 
-        Glide.with(this).load(backdrophImage).error(R.drawable.ic_launcher_background).into(imgBackdropFav);
-        Glide.with(this).load(imagePoster).error(R.drawable.ic_launcher_background).into(imgPosterFav);
+        Glide.with(this).load("https://image.tmdb.org/t/p/w500/" + backdrop).error(R.drawable.ic_launcher_background).into(imgBackdrop);
+        Glide.with(this).load("https://image.tmdb.org/t/p/w500" + poster).error(R.drawable.ic_launcher_background).into(imgPoster);
 
-        tvReleaseDateFav.setText(release);
-        tvVoteFav.setText(voteAverage);
-        tvLangFav.setText(language);
-        tvOverviewFav.setText(overview);
+        tvReleaseDate.setText(relase_date);
+        tvVote.setText(vote);
+        tvLang.setText(language);
+        tvOverview.setText(overview);
 
     }
 
-    private void initView() {
-        appBar = findViewById(R.id.app_bar);
-        toolbarLayout = findViewById(R.id.toolbar_layout);
-        toolbar = findViewById(R.id.toolbar);
-        imgPosterFav = findViewById(R.id.poster);
-        tvReleaseDateFav = findViewById(R.id.release_date);
-        tvVoteFav = findViewById(R.id.vote);
-        tvLangFav = findViewById(R.id.language);
-        tvOverviewFav = findViewById(R.id.overview);
-        fab = findViewById(R.id.fab);
-        imgBackdropFav = findViewById(R.id.backdrop);
-    }
+
 
 
 }

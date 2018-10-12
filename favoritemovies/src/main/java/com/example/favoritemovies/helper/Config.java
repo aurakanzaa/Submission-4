@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public class Config {
+public final class Config {
     public static final String AUTHORITY = "com.example.aura.submission4_basisdata";
     public static final String PATH_TASKS ="listfilm";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
@@ -17,30 +17,13 @@ public class Config {
         public static final String FIELD_ID = "id";
         public static final String FIELD_ID_ = "_id";
         public static final String FIELD_TITTLE = "tittle";
-        public static final String FIELD_TGL = "tgl";
         public static final String FIELD_VOTE_AVERAGE = "vote_average";
-        public static final String FIELD_VOTE_COUNT = "vote_count";
         public static final String FIELD_ORIGINAL_LANGUAGE =  "original_language";
         public static final String FIELD_OVERVIEW = "overview";
-        public static final String FIELD_STATUS_FAVORITE = "status_favorite";
         public static final String FIELD_POSTER_PATH = "poster";
         public static final String FIELD_RELEASE_DATE = "release_date";
-        public static final String FIELD_POPULARITY = "popularity";
         public static final String FIELD_BACKDROPH_PATH = "backdroph_path";
     }
-
-    public static final String ERROR_NETWORK = "Periksai koneksi anda";
-    public static final String ERROR_LIST = "Response Skiped";
-
-    public static final String BUNDLE_ID = "bundle_id";
-    public static final String BUNDLE_POSTER_IMAGE = "bundle_image";
-    public static final String BUNDLE_BACKDROPH_IMAGE = "bundle_image_backdroph";
-    public static final String BUNDLE_TITTLE = "bundle_tittle";
-    public static final String BUNDLE_OVERVIEW = "bundle_overview";
-    public static final String BUNDLE_RELEASE_DATE = "bundle_release_date";
-    public static final String BUNDLE_VOTE_AVERAGE = "bundle_vote_average";
-    public static final String BUNDLE_ORIGINAL_LANGUAGE = "bundle_language";
-
 
 
 
